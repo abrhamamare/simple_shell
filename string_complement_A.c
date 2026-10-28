@@ -15,6 +15,7 @@ int splitString(config *cart)
 	{
 		cart->args = NULL;
 		free(cart->buffer);
+		cart->buffer = NULL;
 		return (FALSE);
 	}
 	cart->args = malloc((countWords(cart->buffer) + 1) * sizeof(char *));

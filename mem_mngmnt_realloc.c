@@ -35,7 +35,7 @@ void *_realloc(void *ptr, unsigned int old_size, unsigned int new_size)
 		perror("Malloc failed");
 		exit(errno);
 	}
-	_memcpy(res, ptr, old_size);
+	_memcpy(res, ptr, old_size < new_size ? old_size : new_size);
 	free(ptr);
 	return (res);
 }

@@ -26,11 +26,16 @@ int checkPath(config *cart)
 			free(copy);
 			return (TRUE);
 		}
-		len = _strlen(tok) + _strlen(cart->args[0]) + 2;
-		_strcat(buffer, tok);
-		_strcat(buffer, "/");
-		_strcat(buffer, cart->args[0]);
-		insertNull(buffer, len - 1);
+		/* Avoid overflowing the fixed-size candidate path buffer. */
+		len = snprintf(buffer, sizeof(buffer), "%s/%s", tok,
+			cart->args[0]);
+		if (len < 0 || (size_t)len >= sizeof(buffer))
+		{
+			buffer[0] = '\\0';
+			tok = _strtok(NULL, delim);
+			inLoop = TRUE;
+			continue;
+		}
 		if (stat(buffer, &st) == 0)
 		{
 			free(copy);
